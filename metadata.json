@@ -1,0 +1,6 @@
+{
+  "name": "MOBIKISSI",
+  "description": "Plateforme moderne de pointage, d'épargne et d'accompagnement entrepreneurial en République du Congo, propulsée par TO SOLOLA Group.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

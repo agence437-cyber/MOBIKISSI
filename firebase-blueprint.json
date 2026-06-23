@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "referral": {
+      "title": "Referral Record",
+      "description": "Logs referral signups and bonus tracking",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "referrerId": { "type": "string" },
+        "refereeId": { "type": "string" },
+        "refereeName": { "type": "string" },
+        "bonusAmount": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "referrerId", "refereeId", "bonusAmount", "createdAt"]
+    },
+    "badge": {
+      "title": "User Badge",
+      "description": "Tracks gamified savings milestones achieved by clients",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "badgeId": { "type": "string" },
+        "title": { "type": "string" },
+        "unlockedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "badgeId", "title", "unlockedAt"]
+    },
+    "workspace_backup": {
+      "title": "Google Workspace Backup",
+      "description": "Logs exports to Google Drive, Gmail, or Google Docs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "exportType": { "type": "string" },
+        "fileName": { "type": "string" },
+        "exportedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "exportType", "fileName", "exportedAt"]
+    }
+  },
+  "firestore": {
+    "/referrals/{referralId}": {
+      "schema": "referral",
+      "description": "User referral tracking"
+    },
+    "/users/{userId}/badges/{badgeId}": {
+      "schema": "badge",
+      "description": "User gamification badges"
+    },
+    "/workspace_backups/{backupId}": {
+      "schema": "workspace_backup",
+      "description": "Workspace activity logs"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitive Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // isValidReferral helper
+    function isValidReferral(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.referrerId is string && data.referrerId.size() <= 100
+        && data.refereeId is string && data.refereeId.size() <= 100
+        && data.refereeName is string && data.refereeName.size() <= 200
+        && data.bonusAmount is number && data.bonusAmount == 1000;
+    }
+
+    // isValidBadge helper
+    function isValidBadge(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.userId is string && data.userId.size() <= 100
+        && data.badgeId is string && data.badgeId.size() <= 100
+        && data.title is string && data.title.size() <= 200;
+    }
+
+    // isValidBackup helper
+    function isValidBackup(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.userId is string && data.userId.size() <= 100
+        && data.exportType is string && data.exportType.size() <= 50
+        && data.fileName is string && data.fileName.size() <= 256;
+    }
+
+    // Rule matches
+    match /referrals/{referralId} {
+      allow read: if isSignedIn() && (resource.data.referrerId == request.auth.uid || resource.data.refereeId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(referralId) && isValidReferral(request.resource.data) && request.resource.data.createdAt == request.time;
+    }
+
+    match /users/{userId}/badges/{badgeId} {
+      allow read: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && isValidId(badgeId) && isValidBadge(request.resource.data) && request.resource.data.unlockedAt == request.time;
+    }
+
+    match /workspace_backups/{backupId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(backupId) && isValidBackup(request.resource.data) && request.resource.data.userId == request.auth.uid && request.resource.data.exportedAt == request.time;
+    }
+  }
+}

@@ -97,9 +97,6 @@ export default function ClientDashboard({
     }
   };
 
-  // Hamburger drawer state
-  const [hamburgerOpen, setHamburgerOpen] = useState(false);
-
   // Google Workspace state management
   const [googleUser, setGoogleUser] = useState<any>(null);
   const [isWorkspaceLoggingIn, setIsWorkspaceLoggingIn] = useState(false);
@@ -247,50 +244,24 @@ export default function ClientDashboard({
   return (
     <div className="flex flex-col min-h-[85vh] relative pb-24 font-sans">
       
-      {/* HEADER SECTION (CLEAN WITH MAGNIFYING GLASS & BELL) */}
-      <div className="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-6 shadow-sm">
-        <div className="flex items-center gap-3">
-          {/* Hamburger Menu Trigger */}
-          <button 
-            onClick={() => setHamburgerOpen(true)}
-            className="p-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-850 rounded-xl text-slate-800 dark:text-slate-100 cursor-pointer"
-            title="Menu de navigation"
-          >
-            <Menu className="w-5 h-5" />
+      {/* EN-TÊTE MOBILE SIMPLIFIÉE */}
+      <header className="sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 mb-5 px-4 sm:px-6 lg:px-8 py-3 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur border-b border-slate-200/80 dark:border-slate-800">
+        <div className="max-w-md mx-auto flex items-center justify-between">
+          <button onClick={() => navigateTo('accueil')} className="text-left cursor-pointer">
+            <span className="block text-[9px] uppercase font-black tracking-[0.2em] text-orange-550">Mon épargne</span>
+            <span className="block text-base font-black text-slate-900 dark:text-white">MOBIKISSI</span>
           </button>
-          
-          <div>
-            <span className="text-[9px] uppercase font-black tracking-widest text-orange-550">Tontine numérique</span>
-            <h2 className="text-sm font-black text-slate-850 dark:text-white leading-none">MOBIKISSI BANQUE</h2>
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigateTo('notifications')} className="relative p-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-100 shadow-sm" title="Notifications">
+              <Bell className="w-5 h-5" />
+              {unreadNotifsCount > 0 && <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-orange-600 text-white text-[8px] font-black flex items-center justify-center">{unreadNotifsCount}</span>}
+            </button>
+            <button onClick={() => navigateTo('compte')} className="w-10 h-10 rounded-full bg-orange-500 text-white font-black text-sm shadow-sm ring-2 ring-orange-100 dark:ring-orange-950" title="Mon profil">
+              {client.name.trim().slice(0, 1).toUpperCase()}
+            </button>
           </div>
         </div>
-
-        {/* Action icons */}
-        <div className="flex items-center gap-2">
-          {/* Quick global search trigger */}
-          <button 
-            onClick={() => navigateTo('recherche')}
-            className="p-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-850 rounded-xl text-slate-700 dark:text-slate-200 cursor-pointer"
-            title="Recherche globale"
-          >
-            <Search className="w-4.5 h-4.5" />
-          </button>
-
-          {/* Fullscreen Notifications Bell Trigger */}
-          <button 
-            onClick={() => navigateTo('notifications')}
-            className="p-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-850 rounded-xl relative text-slate-700 dark:text-slate-200 cursor-pointer"
-            title="Mes notifications"
-          >
-            <Bell className="w-4.5 h-4.5" />
-            {unreadNotifsCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange-600 text-white rounded-full text-[8px] font-black flex items-center justify-center animate-bounce border border-white dark:border-slate-800">
-                {unreadNotifsCount}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
+      </header>
 
       {/* RENDER CURRENT ACTIVE ROUTER VIEW */}
       <div className="flex-1">
@@ -493,211 +464,22 @@ export default function ClientDashboard({
         </AnimatePresence>
       </div>
 
-      {/* === MENU LATÉRAL SIDEBAR DRAWER (☰ Hamburger) === */}
-      <AnimatePresence>
-        {hamburgerOpen && (
-          <div className="fixed inset-0 z-50 flex">
-            {/* Backdrop blur overlay */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setHamburgerOpen(false)}
-              className="fixed inset-0 bg-slate-950 backdrop-blur-xs"
-            />
-
-            {/* Sliding Drawer Container */}
-            <motion.div 
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 24, stiffness: 220 }}
-              className="relative w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full p-6 shadow-2xl flex flex-col justify-between overflow-y-auto"
-            >
-              <div className="space-y-6">
-                {/* Logo top bar */}
-                <div className="flex items-center justify-between border-b border-slate-50 dark:border-slate-850 pb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl select-none">🪪</span>
-                    <div>
-                      <h3 className="text-sm font-black tracking-tight text-slate-900 dark:text-white uppercase font-sans">MOBIKISSI</h3>
-                      <span className="text-[8px] font-black text-slate-400">TO SOLOLA FINTECH GROUP</span>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => setHamburgerOpen(false)}
-                    className="p-1.5 bg-slate-50 dark:bg-slate-850 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* Navigation Options list */}
-                <div className="space-y-1.5 text-xs font-bold text-slate-700 dark:text-slate-300">
-                  <span className="block text-[9px] text-slate-400 uppercase tracking-wider pl-1 mb-2 font-black">Mon Espace Personnel</span>
-                  
-                  <button 
-                    onClick={() => navigateTo('accueil')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen === 'accueil' ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <Home className="w-4 h-4" />
-                    <span>Tableau de bord</span>
-                  </button>
-
-                  <button 
-                    onClick={() => navigateTo('cartes')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen.startsWith('cartes') ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <CreditCard className="w-4 h-4" />
-                    <span>Mes Cartes d'Épargne</span>
-                  </button>
-
-                  <button 
-                    onClick={() => navigateTo('transactions')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen.startsWith('transactions') ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <ArrowRightLeft className="w-4 h-4" />
-                    <span>Historique & Relevés</span>
-                  </button>
-
-                  <button 
-                    onClick={() => navigateTo('retrait')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen === 'retrait' ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <ArrowRightLeft className="w-4 h-4" />
-                    <span>Guichet de Retrait</span>
-                  </button>
-
-                  <button 
-                    onClick={() => navigateTo('assistance')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen.startsWith('assistance') ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <Handshake className="w-4 h-4" />
-                    <span>Aide & Prêt Commercial</span>
-                  </button>
-
-                  <span className="block text-[9px] text-slate-400 uppercase tracking-wider pl-1 pt-4 mb-2 font-black">Support & Caisse</span>
-
-                  <button 
-                    onClick={() => navigateTo('transactions-reçus-list')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen === 'transactions-reçus-list' ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <FileText className="w-4 h-4 text-emerald-500" />
-                    <span>Mes Reçus de caisse</span>
-                  </button>
-
-                  <button 
-                    onClick={() => navigateTo('compte-support')}
-                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer ${
-                      currentScreen === 'compte-support' ? 'bg-orange-500/10 text-orange-600' : 'hover:bg-slate-50 dark:hover:bg-slate-850/50'
-                    }`}
-                  >
-                    <Phone className="w-4 h-4 text-blue-500" />
-                    <span>FAQ & Assistance technique</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Drawer bottom information panel */}
-              <div className="border-t border-slate-50 dark:border-slate-850 pt-4 space-y-2">
-                <div className="flex items-center gap-3 px-1">
-                  <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-extrabold flex items-center justify-center text-xs select-none">
-                    {client.name.substring(0, 1)}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[11px] font-black text-slate-900 dark:text-white truncate">{client.name}</p>
-                    <p className="text-[9px] text-slate-400 truncate">{client.email}</p>
-                  </div>
-                </div>
-
-                <div className="p-2 bg-slate-50 dark:bg-slate-850 rounded-lg text-[9px] text-slate-400 italic">
-                  💡 Mode Pilote Actif. Utilisez le sélecteur supérieur de la barre globale pour tester d'autres rôles de staff.
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* === STICKY BOTTOM NAVIGATION BAR === */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-2.5 shadow-lg">
-        <div className="max-w-md mx-auto flex justify-around items-center px-2">
-          
-          <button 
-            onClick={() => navigateTo('accueil')}
-            className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${
-              currentScreen === 'accueil' || currentScreen === 'recherche' || currentScreen === 'notifications'
-                ? 'text-orange-500 scale-105 font-black' 
-                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
-            }`}
-          >
-            <Home className="w-5 h-5 stroke-[2.3]" />
-            <span className="text-[9px] uppercase tracking-wider font-extrabold font-sans">Accueil</span>
-          </button>
-
-          <button 
-            onClick={() => navigateTo('cartes')}
-            className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${
-              currentScreen.startsWith('cartes') 
-                ? 'text-orange-500 scale-105 font-black' 
-                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
-            }`}
-          >
-            <CreditCard className="w-5 h-5 stroke-[2.3]" />
-            <span className="text-[9px] uppercase tracking-wider font-extrabold font-sans">Mes Cartes</span>
-          </button>
-
-          <button 
-            onClick={() => navigateTo('transactions')}
-            className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${
-              currentScreen.startsWith('transactions') 
-                ? 'text-orange-500 scale-105 font-black' 
-                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
-            }`}
-          >
-            <ArrowRightLeft className="w-5 h-5 stroke-[2.3]" />
-            <span className="text-[9px] uppercase tracking-wider font-extrabold font-sans">Transactions</span>
-          </button>
-
-          <button 
-            onClick={() => navigateTo('retrait')}
-            className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${
-              currentScreen === 'retrait' || currentScreen === 'retrait-confirmation'
-                ? 'text-orange-500 scale-105 font-black' 
-                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
-            }`}
-          >
-            <LifeBuoy className="w-5 h-5 stroke-[2.3]" />
-            <span className="text-[9px] uppercase tracking-wider font-extrabold font-sans">Retrait</span>
-          </button>
-
-          <button 
-            onClick={() => navigateTo('compte')}
-            className={`flex flex-col items-center gap-1 cursor-pointer transition-all ${
-              currentScreen.startsWith('compte') 
-                ? 'text-orange-500 scale-105 font-black' 
-                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
-            }`}
-          >
-            <UserIcon className="w-5 h-5 stroke-[2.3]" />
-            <span className="text-[9px] uppercase tracking-wider font-extrabold font-sans">Profil</span>
-          </button>
-
+      {/* NAVIGATION MOBILE : 4 ACTIONS ESSENTIELLES */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_24px_rgba(15,23,42,0.08)]">
+        <div className="max-w-md mx-auto grid grid-cols-4 px-2">
+          {[
+            { id: 'accueil', label: 'Accueil', icon: Home, active: currentScreen === 'accueil' || currentScreen === 'notifications' || currentScreen === 'recherche' },
+            { id: 'cartes', label: 'Épargne', icon: CreditCard, active: currentScreen.startsWith('cartes') },
+            { id: 'transactions', label: 'Activité', icon: ArrowRightLeft, active: currentScreen.startsWith('transactions') || currentScreen === 'retrait' || currentScreen === 'retrait-confirmation' },
+            { id: 'assistance', label: 'Aide', icon: Handshake, active: currentScreen.startsWith('assistance') || currentScreen === 'compte-support' }
+          ].map(({ id, label, icon: Icon, active }) => (
+            <button key={id} onClick={() => navigateTo(id)} className={`flex flex-col items-center justify-center gap-1 py-1.5 rounded-xl transition-all ${active ? 'text-orange-600' : 'text-slate-400 dark:text-slate-500'}`}>
+              <span className={`p-1 rounded-lg ${active ? 'bg-orange-100 dark:bg-orange-500/15' : ''}`}><Icon className="w-5 h-5 stroke-[2.3]" /></span>
+              <span className="text-[9px] font-extrabold">{label}</span>
+            </button>
+          ))}
         </div>
-      </div>
-
+      </nav>
     </div>
   );
 }

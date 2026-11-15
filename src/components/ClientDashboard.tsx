@@ -212,6 +212,7 @@ export default function ClientDashboard({
       clientId: client.id,
       clientName: client.name,
       amount: amount,
+      agentId:paymentMethod: 'cash',
       agentId: 'u-system',
       agentName: 'Guichet Automatique',
       createdAt: new Date().toISOString(),

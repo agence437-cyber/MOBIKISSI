@@ -39,12 +39,15 @@ export interface Card {
   rule31Applied: 'pending' | 'mobikissi_kept' | 'mobikissi_released';
 }
 
+export type PaymentMethod = 'cash' | 'mobile_money' | 'bank_transfer';
+
 export interface Transaction {
   id: string;
   type: 'depot' | 'retrait' | 'frais_ouverture';
   clientId: string;
   clientName: string;
   amount: number;
+  paymentMethod: PaymentMethod;
   agentId: string;
   agentName: string;
   createdAt: string;

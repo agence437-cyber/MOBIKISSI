@@ -194,6 +194,7 @@ export default function ClientTransactions({
                     <div>
                       <span className="text-[11px] font-black text-slate-850 dark:text-white block uppercase">Reçu #{tx.id.slice(0, 8)}</span>
                       <span className="text-[9px] text-slate-400">{new Date(tx.createdAt).toLocaleDateString('fr-FR')}</span>
+                      <span className="block text-[8px] font-black uppercase tracking-wider text-emerald-600">Paiement cash</span>
                     </div>
                   </div>
                   <span className="font-mono text-xs text-slate-850 dark:text-white font-black">{tx.amount.toLocaleString()} FCFA</span>

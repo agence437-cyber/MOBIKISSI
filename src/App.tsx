@@ -702,6 +702,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200">
       
+      <div className={currentUserObj.role === 'CLIENT' ? 'hidden md:block' : ''}>
       {/* 1. TOP GLOBAL NAVIGATION HEADER */}
       <Navbar 
         currentUser={currentUserObj}
@@ -717,6 +718,8 @@ export default function App() {
         onMarkNotificationsRead={handleMarkNotificationsRead}
         onResetData={resetProjectToDefaultSeeding}
       />
+
+      </div>
 
       {/* 2. CHOOSE SPECIFIC CORE VIEW BASED ON CURRENT LOGGED IN USER ROLE */}
       <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
